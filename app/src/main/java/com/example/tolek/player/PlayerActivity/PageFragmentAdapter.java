@@ -4,10 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.example.tolek.player.Widgets.AlbumPageFragment;
-import com.example.tolek.player.Widgets.ArtistPageFragment;
-import com.example.tolek.player.Widgets.SongPageFragment;
-
 
 public class PageFragmentAdapter extends FragmentStatePagerAdapter {
     PlayerPageFragment playerPageFragment;

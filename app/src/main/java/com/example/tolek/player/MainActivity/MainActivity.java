@@ -1,4 +1,4 @@
-package com.example.tolek.player.Widgets;
+package com.example.tolek.player.MainActivity;
 
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.Scene;
 import android.transition.Transition;
+import android.util.Log;
 import android.view.View;
 
 import com.example.tolek.player.PageFragmentAdapter;
@@ -17,8 +18,6 @@ import com.example.tolek.player.PlayerActivity.PlayerActivity;
 
 public class MainActivity extends AppCompatActivity {
     private final String MYTAG = "MYTAG";
-    private Transition transition;
-    private Scene scene1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +25,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        Player.getInstance().launch(this);
+        Player.getInstance().setContext(this);
+        Player.getInstance().setBottomViewHolder();
         FileWorker.setContentResolver(getContentResolver());
         FileWorker.launch();
 
         TabLayout tabLayout = findViewById(R.id.tab);
-
         ViewPager viewPager = findViewById(R.id.view_pager);
 /*
         DisabledSwipeViewPager viewPager = findViewById(R.id.view_pager);
@@ -39,14 +38,13 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager.setAdapter(new PageFragmentAdapter(getSupportFragmentManager(), 4));
 
-        findViewById(R.id.bottom_card_view).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getBaseContext(), PlayerActivity.class));
-                overridePendingTransition(R.anim.animation_player_show, R.anim.animation_main_hide);
-            }
-        });
-
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    protected void onResume(){
+        Player.getInstance().setContext(this);
+        Player.getInstance().setBottomViewHolder();
+        super.onResume();
     }
 }

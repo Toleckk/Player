@@ -1,26 +1,40 @@
 package com.example.tolek.player.Entities;
 
-/**
- * Created by Tolek on 08.03.2018.
- */
+import java.util.ArrayList;
+
+
 
 public class Artist {
-    String name;
-    int tracksQuantity = 1;
+    private String name;
+    private ArrayList<Song> songs;
 
-    public Artist(String name) {
-        this.name = name;
+    private String art;
+
+    public Artist(Song song) {
+        songs = new ArrayList<>();
+        songs.add(song);
+
+        if(song.getAlbumArt() != null)
+            art = song.getAlbumArt();
+        this.name = song.getArtist();
     }
 
+    public ArrayList<Song> getSongs() {
+        return songs;
+    }
+
+    public void addSong(Song song){
+        songs.add(song);
+
+        if(art != null && song.getAlbumArt() != null)
+            art = song.getAlbumArt();
+    }
 
     public String getName() {
         return name;
     }
 
-    public void incrementQuantity(){
-        tracksQuantity++;
-    }
-    public int getTracksQuantity() {
-        return tracksQuantity;
+    public String getArt() {
+        return art;
     }
 }

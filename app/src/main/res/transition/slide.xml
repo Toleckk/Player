@@ -1,0 +1,10 @@
+<slide xmlns:android="http://schemas.android.com/apk/res/android"
+    android:slideEdge="right">
+
+    <targets>
+        <target android:excludeId="@android:id/title"/>
+        <target android:excludeId="@android:id/statusBarBackground"/>
+        <target android:excludeId="@android:id/navigationBarBackground"/>
+    </targets>
+
+</slide>

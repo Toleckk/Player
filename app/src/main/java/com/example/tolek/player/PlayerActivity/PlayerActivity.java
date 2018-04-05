@@ -1,11 +1,13 @@
 package com.example.tolek.player.PlayerActivity;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.example.tolek.player.R;
@@ -15,12 +17,6 @@ public class PlayerActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
-
-    @Override
-    protected void onStop(){
-        super.onStop();
-        overridePendingTransition(R.anim.animation_main_show, R.anim.animation_player_hide);
-    }
 
     @Override
     protected void onPause(){
@@ -35,12 +31,19 @@ public class PlayerActivity extends AppCompatActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        Player.getInstance().setContext(this);
 
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         viewPager = findViewById(R.id.playerViewPager);
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setCurrentItem(1);
+    }
+
+    @Override
+    protected void onResume(){
+        Player.getInstance().setContext(this);
+        super.onResume();
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {

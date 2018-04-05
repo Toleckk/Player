@@ -1,4 +1,4 @@
-package com.example.tolek.player.Widgets;
+package com.example.tolek.player.MainActivity;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -29,7 +29,8 @@ public class ArtistPageFragment extends Fragment{
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
-        recyclerView.setAdapter(new ArtistRecyclerViewAdapter(FileWorker.getArtists()));
+        recyclerView.setAdapter(new ArtistRecyclerViewAdapter(FileWorker.getArtists(),
+                getActivity().getDrawable(R.drawable.ic_music_note_black_70dp)));
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),
                 LinearLayoutManager.VERTICAL);

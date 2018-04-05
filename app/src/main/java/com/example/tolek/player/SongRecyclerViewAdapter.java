@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.tolek.player.Entities.Song;
 import com.example.tolek.player.Util.FileWorker;
 import com.example.tolek.player.Util.Player;
@@ -45,12 +47,12 @@ public final class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecy
         holder.artistAndAlbum.setText(songsList.get(position).getArtist() +
                 " — " + songsList.get(position).getAlbum());
 
-        holder.albumArt.setImageDrawable(songsList.get(position).getAlbumArt() == null
-                ? musicArt
-                : Drawable.createFromPath(songsList.get(position).getAlbumArt())
-        );
+        Glide.with(holder.mainCardView.getContext())
+                .load(songsList.get(position).getAlbumArt())
+                .apply(new RequestOptions().placeholder(musicArt))
+                .into(holder.albumArt);
         holder.song = songsList.get(position);
-
+        holder.playlist = songsList;
     }
 
     @Override
@@ -65,8 +67,9 @@ public final class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecy
         TextView title;
         TextView artistAndAlbum;
         Song song;
+        ArrayList<Song> playlist;
 
-        public SongViewHolder(View itemView){
+        public SongViewHolder(final View itemView){
             super(itemView);
 
             mainCardView = itemView.findViewById(R.id.songCardView);
@@ -81,8 +84,8 @@ public final class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecy
                     if(player.getCurrentSong() != null && player.getCurrentSong().equals(song) && player.isPlaying())
                         player.pause();
                     else {
-                        if(!player.getCurrentPlaylist().equals(FileWorker.getSongs()))
-                            player.setPlaylist(FileWorker.getSongs());
+                        if(!player.getCurrentPlaylist().equals(playlist))
+                            player.setPlaylist(playlist);
 
                         player.play(song);
                     }

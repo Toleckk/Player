@@ -30,7 +30,6 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public final class FileWorker {
-
     static private ArrayList<Song> songsList = new ArrayList<>();
     static private ArrayList<Album> albumsList = new ArrayList<>();
     static private ArrayList<Artist> artistsList = new ArrayList<>();
@@ -328,20 +327,19 @@ public final class FileWorker {
             for(Artist artist : artistsList)
                 if(song.getArtist().equals("Unknown artist")) {
                     if (artist.getName().equals("Unknown artist")){
-                        artist.incrementQuantity();
+                        artist.addSong(song);
                         isContains = true;
                         break;
                     }
                 }
                 else if(artist.getName().equals(song.getArtist())) {
-                    artist.incrementQuantity();
+                    artist.addSong(song);
                     isContains = true;
                     break;
                 }
 
             if(!isContains)
-                artistsList.add(new Artist(song.getArtist()));
-
+                artistsList.add(new Artist(song));
         }
     }
 
@@ -351,23 +349,24 @@ public final class FileWorker {
             for(Album album : albumsList)
                 if(song.getAlbum().equals("Unknown album")) {
                     if(album.getAlbumName().equals("Unknown album")) {
-                        album.incrementingQuantity();
+                        album.addSong(song);
                         isContains = true;
                         break;
                     }
                 }
                 else if(album.getArtist().equals(song.getArtist()) && album.getAlbumName().equals(song.getAlbum())) {
-                    album.incrementingQuantity();
+                    album.addSong(song);
                     isContains = true;
                     break;
                 }
 
-            if(!isContains)
-                albumsList.add(new Album(
-                        song.getAlbum(),
+            if(!isContains) {
+                Album album = new Album(song.getAlbum(),
                         song.getAlbumArt(),
-                        song.getAlbum().equals("Unknown album") ? "" : song.getArtist()
-                ));
+                        song.getAlbum().equals("Unknown album") ? "" : song.getArtist());
+                album.addSong(song);
+                albumsList.add(album);
+            }
         }
     }
 }

@@ -1,25 +1,29 @@
 package com.example.tolek.player.Entities;
 
-import android.graphics.drawable.Drawable;
+import java.util.ArrayList;
 
-/**
- * Created by Tolek on 07.03.2018.
- */
 
 public class Album {
+
+
     private String albumName;
     private String albumArt;
     private String artist;
-    private int tracksQuantity = 1;
+    private ArrayList<Song> songs;
 
     public Album(String albumName, String albumArt, String artist){
         this.albumName = albumName;
         this.albumArt = albumArt;
         this.artist = artist;
+        songs = new ArrayList<>();
     }
 
-    public void incrementingQuantity(){
-        tracksQuantity++;
+    public void addSong(Song song){
+        songs.add(song);
+    }
+
+    public ArrayList<Song> getSongs() {
+        return songs;
     }
 
     public String getAlbumName() {
@@ -32,9 +36,5 @@ public class Album {
 
     public String getArtist() {
         return artist;
-    }
-
-    public int getTracksQuantity(){
-        return tracksQuantity;
     }
 }

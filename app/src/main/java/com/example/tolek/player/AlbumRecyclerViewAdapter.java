@@ -1,5 +1,6 @@
 package com.example.tolek.player;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.tolek.player.Entities.Album;
+import com.example.tolek.player.Util.FileWorker;
+import com.example.tolek.player.AlbumActivity.AlbumActivity;
 
 import java.util.ArrayList;
 
@@ -19,13 +24,13 @@ public final class AlbumRecyclerViewAdapter extends RecyclerView.Adapter<AlbumRe
     ArrayList<Album> albumsList;
     Drawable musicArt;
 
-    public AlbumRecyclerViewAdapter(ArrayList<Album> albumsList, Drawable musicArt){
+    public AlbumRecyclerViewAdapter(ArrayList<Album> albumsList, Drawable musicArt) {
         this.musicArt = musicArt;
         this.albumsList = albumsList;
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView){
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
 
@@ -38,13 +43,15 @@ public final class AlbumRecyclerViewAdapter extends RecyclerView.Adapter<AlbumRe
 
     @Override
     public void onBindViewHolder(AlbumViewHolder holder, int position) {
-        holder.album.setText(albumsList.get(position).getAlbumName());
+        holder.albumText.setText(albumsList.get(position).getAlbumName());
         holder.artist.setText(albumsList.get(position).getArtist());
 
-        holder.albumArt.setImageDrawable(albumsList.get(position).getAlbumArt() == null
-                ? musicArt
-                : Drawable.createFromPath(albumsList.get(position).getAlbumArt())
-        );
+        Glide.with(holder.mainCardView.getContext())
+                .load(albumsList.get(position).getAlbumArt())
+                .apply(new RequestOptions().placeholder(musicArt))
+                .into(holder.albumArt);
+
+        holder.album = albumsList.get(position);
     }
 
     @Override
@@ -52,20 +59,43 @@ public final class AlbumRecyclerViewAdapter extends RecyclerView.Adapter<AlbumRe
         return albumsList.size();
     }
 
-    public static class AlbumViewHolder extends RecyclerView.ViewHolder{
+    public static class AlbumViewHolder extends RecyclerView.ViewHolder {
 
         CardView mainCardView;
         ImageView albumArt;
-        TextView album;
+        TextView albumText;
         TextView artist;
+        Album album;
 
-        public AlbumViewHolder(View itemView){
+        public AlbumViewHolder(View itemView) {
             super(itemView);
 
             mainCardView = itemView.findViewById(R.id.albumCardView);
             albumArt = itemView.findViewById(R.id.album_art);
-            album = itemView.findViewById(R.id.album);
+            albumText = itemView.findViewById(R.id.album);
             artist = itemView.findViewById(R.id.album_artist);
+
+            mainCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    view.getContext().startActivity(
+                            new Intent(view.getContext(), AlbumActivity.class)
+                                .putExtra("Album",FileWorker.getAlbums().indexOf(album))
+                    );
+                }
+            });
         }
     }
 }
+
+//                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+//                            (Activity)view.getContext(),
+//                            new Pair<>(((Activity)view.getContext())
+//                                            .findViewById(R.id.bottom_card_view),
+//                                        view.getContext().getString(R.string.transition_name_bottom))
+//                    );
+//
+//                    ((Activity)view.getContext()).startActivity(
+//                            new Intent(view.getContext(), AlbumActivity.class)
+//                                .putExtra("Album",FileWorker.getAlbums().indexOf(album)),
+//                            options.toBundle());

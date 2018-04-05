@@ -28,7 +28,7 @@ public class PlayerPageFragment extends Fragment{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.player, container, false);
 
-        Player.getInstance().setContext(getActivity(), view);
+        Player.getInstance().setPlayerViewHolder(view);
 
         ImageView imageView = view.findViewById(R.id.bicycle);
         int size = getResources().getDimensionPixelSize(

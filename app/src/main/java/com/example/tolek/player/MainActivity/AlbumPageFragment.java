@@ -1,4 +1,4 @@
-package com.example.tolek.player.Widgets;
+package com.example.tolek.player.MainActivity;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package com.example.tolek.player.Widgets;
+package com.example.tolek.player.MainActivity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
