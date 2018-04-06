@@ -28,10 +28,10 @@ public class Player {
     private static final Player ourInstance = new Player();
     private static final String MYTAG = "MYTAG";
     private final int MAX_PLAYLIST_SIZE = 1000;
-    private MediaPlayer mediaPlayer = new MediaPlayer();
-    private Song currentSong = null;
-    private ArrayList<Song> lastSongs = new ArrayList<>();
-    private ArrayList<Song> currentPlaylist = new ArrayList<>();
+    private MediaPlayer mediaPlayer;
+    private Song currentSong;
+    private ArrayList<Song> lastSongs;
+    private ArrayList<Song> currentPlaylist;
     private BottomViewHolder bottomViewHolder;
     private PlayerViewHolder playerViewHolder;
 
@@ -46,6 +46,10 @@ public class Player {
     }
 
     private Player() {
+        mediaPlayer = new MediaPlayer();
+        lastSongs = new ArrayList<>();
+        currentPlaylist = new ArrayList<>();
+
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {

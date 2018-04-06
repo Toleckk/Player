@@ -1,8 +1,5 @@
 package com.example.tolek.player.Entities;
 
-/**
- * Created by Tolek on 26.02.2018.
- */
 
 final public class Song {
     private String id;
@@ -15,6 +12,7 @@ final public class Song {
     public Long lastPosition = null;
 
 
+    @Deprecated
     public Song(String id, String artist, String title,
                 String album, String path, String duration, String albumArt){
         this.id = id;
@@ -30,6 +28,14 @@ final public class Song {
         this.path = path;
         this.duration = duration;
         this.albumArt = albumArt == null || albumArt.equals("") ? null : albumArt;
+    }
+
+    public Song(String id, String artist, String title, String album, String path, String duration){
+        this(id, artist, title, album, path, duration, null);
+    }
+
+    public void setCover(String albumArt){
+        this.albumArt = albumArt;
     }
 
     public String getAlbumArt() {
