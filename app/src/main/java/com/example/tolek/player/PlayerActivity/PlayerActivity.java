@@ -25,6 +25,12 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy(){
+        Player.getInstance().setPlayerViewHolder(null);
+        super.onDestroy();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);

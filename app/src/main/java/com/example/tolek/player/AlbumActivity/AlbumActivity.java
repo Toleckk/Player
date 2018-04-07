@@ -12,6 +12,7 @@ import com.example.tolek.player.R;
 import com.example.tolek.player.SongRecyclerViewAdapter;
 import com.example.tolek.player.Util.FileWorker;
 import com.example.tolek.player.Util.Player;
+import com.example.tolek.player.debug.MediaStore;
 
 import java.util.ArrayList;
 
@@ -23,7 +24,7 @@ public class AlbumActivity extends AppCompatActivity {
         setContentView(R.layout.activity_album);
 
         Player.getInstance().setContext(this);
-        Player.getInstance().setBottomViewHolder();
+        Player.getInstance().setBottomViewHolder(this);
 
         RecyclerView recyclerView = findViewById(R.id.songRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -32,9 +33,9 @@ public class AlbumActivity extends AppCompatActivity {
         ArrayList<Song> songs;
         int index = getIntent().getIntExtra("Album", -1);
         if(index != -1)
-            songs = FileWorker.getAlbums().get(index).getSongs();
+            songs = MediaStore.getInstance().getAlbums().get(index).getSongs();
         else
-            songs = FileWorker.getArtists()
+            songs = MediaStore.getInstance().getArtists()
                     .get(getIntent().getIntExtra("Artist", -1)).getSongs();
 
         recyclerView.setAdapter(new SongRecyclerViewAdapter(
@@ -46,7 +47,7 @@ public class AlbumActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         Player.getInstance().setContext(this);
-        Player.getInstance().setBottomViewHolder();
+        Player.getInstance().setBottomViewHolder(this);
         super.onResume();
     }
 /*

@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.tolek.player.Entities.Album;
 import com.example.tolek.player.Util.FileWorker;
 import com.example.tolek.player.AlbumActivity.AlbumActivity;
+import com.example.tolek.player.debug.MediaStore;
 
 import java.util.ArrayList;
 
@@ -47,7 +48,7 @@ public final class AlbumRecyclerViewAdapter extends RecyclerView.Adapter<AlbumRe
         holder.artist.setText(albumsList.get(position).getArtist());
 
         Glide.with(holder.mainCardView.getContext())
-                .load(albumsList.get(position).getAlbumArt())
+                .load(albumsList.get(position).getCover())
                 .apply(new RequestOptions().placeholder(musicArt))
                 .into(holder.albumArt);
 
@@ -80,7 +81,8 @@ public final class AlbumRecyclerViewAdapter extends RecyclerView.Adapter<AlbumRe
                 public void onClick(View view) {
                     view.getContext().startActivity(
                             new Intent(view.getContext(), AlbumActivity.class)
-                                .putExtra("Album",FileWorker.getAlbums().indexOf(album))
+                                .putExtra("Album",
+                                        MediaStore.getInstance().getAlbums().indexOf(album))
                     );
                 }
             });

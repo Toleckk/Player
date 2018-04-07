@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.example.tolek.player.R;
 import com.example.tolek.player.SongRecyclerViewAdapter;
 import com.example.tolek.player.Util.FileWorker;
+import com.example.tolek.player.debug.MediaStore;
 
 public class SongPageFragment extends Fragment {
 
@@ -31,7 +32,7 @@ public class SongPageFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
 
         recyclerView.setAdapter(new SongRecyclerViewAdapter(
-                FileWorker.getSongs(),
+                MediaStore.getInstance().getSongs(),
                 getActivity().getDrawable(R.drawable.ic_music_note_black_70dp)
         ));
 

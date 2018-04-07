@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.example.tolek.player.ArtistRecyclerViewAdapter;
 import com.example.tolek.player.R;
 import com.example.tolek.player.Util.FileWorker;
+import com.example.tolek.player.debug.MediaStore;
 
 public class ArtistPageFragment extends Fragment{
     @Override
@@ -29,7 +30,7 @@ public class ArtistPageFragment extends Fragment{
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
-        recyclerView.setAdapter(new ArtistRecyclerViewAdapter(FileWorker.getArtists(),
+        recyclerView.setAdapter(new ArtistRecyclerViewAdapter(MediaStore.getInstance().getArtists(),
                 getActivity().getDrawable(R.drawable.ic_music_note_black_70dp)));
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),

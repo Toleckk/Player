@@ -18,21 +18,15 @@ import com.example.tolek.player.Util.Player;
 import com.example.tolek.player.PlayerActivity.PlayerActivity;
 
 public class MainActivity extends AppCompatActivity {
-    private final String MYTAG = "MYTAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        FileWorker.launch();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-/*
-        Log.d(MYTAG, "Start: " + String.valueOf(System.currentTimeMillis()));
-        SongsRepository.getInstance().initialize();
-        Log.d(MYTAG, "Finish: " + String.valueOf(System.currentTimeMillis()));*/
 
         Player.getInstance().setContext(this);
-        Player.getInstance().setBottomViewHolder();
-        FileWorker.setContentResolver(getContentResolver());
-        FileWorker.launch();
+        Player.getInstance().setBottomViewHolder(this);
 
         TabLayout tabLayout = findViewById(R.id.tab);
         ViewPager viewPager = findViewById(R.id.view_pager);
@@ -48,7 +42,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         Player.getInstance().setContext(this);
-        Player.getInstance().setBottomViewHolder();
+        Player.getInstance().setBottomViewHolder(this);
         super.onResume();
+    }
+
+    @Override
+    protected void onDestroy(){
+        Player.getInstance().setBottomViewHolder(this);
+        super.onDestroy();
     }
 }

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.example.tolek.player.AlbumRecyclerViewAdapter;
 import com.example.tolek.player.R;
 import com.example.tolek.player.Util.FileWorker;
+import com.example.tolek.player.debug.MediaStore;
 
 public class AlbumPageFragment extends Fragment{
     @Override
@@ -30,7 +31,7 @@ public class AlbumPageFragment extends Fragment{
         recyclerView.setHasFixedSize(true);
 
         recyclerView.setAdapter(new AlbumRecyclerViewAdapter(
-                FileWorker.getAlbums(),
+                MediaStore.getInstance().getAlbums(),
                 getActivity().getDrawable(R.drawable.ic_album_black_70dp)
         ));
 

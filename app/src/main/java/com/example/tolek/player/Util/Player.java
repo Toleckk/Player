@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.example.tolek.player.Entities.Song;
 import com.example.tolek.player.PlayerActivity.PlayerActivity;
 import com.example.tolek.player.R;
+import com.example.tolek.player.debug.Logger;
+import com.example.tolek.player.debug.MediaStore;
 import com.example.tolek.player.debug.PlayerViewHolder;
 
 import java.io.IOException;
@@ -50,6 +52,9 @@ public class Player {
         lastSongs = new ArrayList<>();
         currentPlaylist = new ArrayList<>();
 
+        setPlaylist(FileWorker.getListFromJson("currentPlaylist"));
+        setLastSongs(FileWorker.getListFromJson("lastSongs"));
+
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
@@ -60,19 +65,7 @@ public class Player {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                if(currentSong != null
-                        && currentSong.lastPosition != null
-                        && currentSong.lastPosition != (long)mediaPlayer.getCurrentPosition()) {
-                    currentSong.lastPosition = (long) mediaPlayer.getCurrentPosition();
-                    FileWorker.writePlaylist(lastSongs, "lastSongs");
-                }
-            }
-        }, 5000, 5000);
-
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if(playerViewHolder != null && playerViewHolder.getSeekBar() != null
+                if (playerViewHolder != null && playerViewHolder.getSeekBar() != null
                         && !playerViewHolder.getSeekBar().isPressed()
                         && mediaPlayer != null)
                     playerViewHolder.getSeekBar().setProgress(mediaPlayer.getCurrentPosition());
@@ -81,7 +74,7 @@ public class Player {
     }
 
     @Nullable
-    public Song getCurrentSong(){
+    public Song getCurrentSong() {
         return currentSong;
     }
 
@@ -98,68 +91,77 @@ public class Player {
     }
 
 
-    public void setPlayerViewHolder(View view){
-        playerViewHolder = new PlayerViewHolder(view);
+    public void setPlayerViewHolder(View view) {
+        if(view != null)
+            playerViewHolder = new PlayerViewHolder(view);
+        else
+            playerViewHolder = null;
     }
 
     public void setCurrentPosition(int progress) {
-        if(mediaPlayer != null)
+        if (mediaPlayer != null)
             mediaPlayer.seekTo(progress);
     }
 
-    public void setContext(Activity context){
+    public void setContext(Activity context) {
         this.context = context;
     }
 
-    public void setBottomViewHolder(){
-        bottomViewHolder = new BottomViewHolder(context);
+    public void setBottomViewHolder(Activity context) {
+        if(context != null)
+            bottomViewHolder = new BottomViewHolder(context);
+        else
+            bottomViewHolder = null;
     }
 
-    public void setPlaylist(ArrayList<Song> playlist){
-        currentPlaylist = playlist;
-        FileWorker.writePlaylist(playlist, "currentPlaylist");
+    public void setPlaylist(ArrayList<Song> playlist) {
+        if(playlist != null && playlist.size() > 0)
+            currentPlaylist = playlist;
+        else
+            currentPlaylist = MediaStore.getInstance().getSongs();
+
+        FileWorker.writePlaylist(currentPlaylist, "currentPlaylist");
     }
 
-    public void setLastSongs(ArrayList<Song> lastSongs){
-        currentPosition = lastSongs.size() - 1;
-        this.lastSongs = lastSongs;
-        currentSong = lastSongs.get(lastSongs.size()-1);
-        if(currentSong != null)
-            try {
-                mediaPlayer.setDataSource(currentSong.getPath());
-                mediaPlayer.prepare();
-                mediaPlayer.seekTo(currentSong.lastPosition == null
-                        ? 0
-                        : currentSong.lastPosition.intValue()
-                );
+    private void setLastSongs(ArrayList<Song> lastSongs) {
+        if (lastSongs != null && lastSongs.size() > 0) {
+            currentPosition = lastSongs.size();
+            this.lastSongs = lastSongs;
+            currentSong = lastSongs.get(lastSongs.size() - 1);
+        } else if (currentPlaylist != null && currentPlaylist.size() > 0 && currentSong == null) {
+            currentSong = currentPlaylist.get(0);
+            currentPosition = 0;
+        }
+
+        try {
+            mediaPlayer.setDataSource(currentSong.getPath());
+            mediaPlayer.prepare();
+            if (context != null)
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         bottomViewHolder.setSong(currentSong);
                     }
                 });
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 
     public void changeMode() {
-        mode = mode == 2 ? 0 : mode+1;
+        mode = mode == 2 ? 0 : mode + 1;
     }
 
 
-    public boolean isPlaying(){
+    public boolean isPlaying() {
         return mediaPlayer != null && mediaPlayer.isPlaying();
     }
 
-    private void prepareMediaPlayer(Song song) throws IOException{
+    private void prepareMediaPlayer(Song song) throws IOException {
         mediaPlayer.reset();
 
         if (currentPlaylist.size() == MAX_PLAYLIST_SIZE)
             currentPlaylist.remove(0);
-
-        if(currentPosition >= lastSongs.size() && mode != 1)
-            lastSongs.add(song);
 
         mediaPlayer.setDataSource(song.getPath());
         mediaPlayer.prepare();
@@ -176,7 +178,7 @@ public class Player {
                 public void run() {
                     bottomViewHolder.getPlay().setImageResource(R.drawable.ic_pause_black_40dp);
                     ImageButton button = context.findViewById(R.id.player_play);
-                    if(button != null)
+                    if (button != null)
                         button.setImageResource(R.drawable.ic_pause_black_70dp);
                 }
             });
@@ -190,9 +192,17 @@ public class Player {
                 public void run() {
                     playFinished = false;
                     try {
-                        if(currentSong != null && currentSong.equals(song))
+                        if (currentSong != null && currentSong.equals(song))
                             play();
                         else {
+                            if(mode == 0)
+                                currentPosition++;
+
+                            Logger.log(String.valueOf(currentPosition) + " "
+                                    + String.valueOf(lastSongs.size()));
+                            if (currentPosition >= lastSongs.size() && mode != 1)
+                                lastSongs.add(song);
+
                             prepareMediaPlayer(song);
                             currentSong = song;
 
@@ -200,7 +210,7 @@ public class Player {
                                 @Override
                                 public void run() {
                                     bottomViewHolder.setSong(currentSong);
-                                    if(playerViewHolder != null)
+                                    if (playerViewHolder != null)
                                         playerViewHolder.setSong(currentSong);
                                 }
                             });
@@ -209,10 +219,10 @@ public class Player {
                             play();
 
                             if (mode == 2) {
-                                if (currentPosition < lastSongs.size() - 2 && !currentSong.equals(lastSongs.get(currentPosition + 1)))
+                                if (currentPosition < lastSongs.size() - 2
+                                        && !currentSong.equals(lastSongs.get(currentPosition + 1)))
                                     for (int i = currentPosition; i < lastSongs.size(); i++)
                                         lastSongs.remove(i);
-                                currentPosition++;
                             }
                         }
                     } catch (IOException exception) {
@@ -223,13 +233,13 @@ public class Player {
             }).start();
     }
 
-    public void pause(){
+    public void pause() {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 bottomViewHolder.getPlay().setImageResource(R.drawable.ic_play_arrow_black_40dp);
                 ImageButton button = context.findViewById(R.id.player_play);
-                if(button != null)
+                if (button != null)
                     button.setImageResource(R.drawable.ic_play_arrow_black_70dp);
             }
         });
@@ -243,28 +253,25 @@ public class Player {
                 @Override
                 public void run() {
                     finished = false;
-                    currentSong.lastPosition = null;
                     if (mode == 0) {
                         int index = currentPlaylist.indexOf(currentSong);
                         play(currentPlaylist.get(index == currentPlaylist.size() - 1 ? 0 : index + 1));
-                        currentPosition++;
                     } else if (mode == 1)
                         try {
                             prepareMediaPlayer(currentSong);
                             play(currentSong);
-                        }catch(IOException exception){
+                        } catch (IOException exception) {
                             exception.printStackTrace();
                         }
                     else if (mode == 2) {
-                        if (currentPosition < lastSongs.size()-1)
-                            play(lastSongs.get(currentPosition +1));
+                        if (currentPosition < lastSongs.size() - 1)
+                            play(lastSongs.get(++currentPosition));
                         else {
+                            currentPosition++;
                             play(currentPlaylist.get(Math.abs(
                                     new Random(System.currentTimeMillis()).nextInt() % (currentPlaylist.size()))
                                     )
                             );
-                            lastSongs.add(currentSong);
-                            currentPosition++;
                         }
                     }
                     finished = true;
@@ -279,22 +286,23 @@ public class Player {
                 @Override
                 public void run() {
                     finished = false;
-                    switch (mode){
+                    switch (mode) {
                         case 0:
                             int index = currentPlaylist.indexOf(currentSong);
                             play(currentPlaylist.get(index == 0 ? currentPlaylist.size() - 1 : index - 1));
+                            currentPosition--;
                             currentPosition--;
                             break;
                         case 1:
                             try {
                                 prepareMediaPlayer(currentSong);
                                 play(currentSong);
-                            }catch(IOException exception){
+                            } catch (IOException exception) {
                                 exception.printStackTrace();
                             }
                             break;
                         case 2:
-                            play(lastSongs.get(currentPosition--));
+                            play(lastSongs.get(--currentPosition));
                             break;
                         default:
                             return;
@@ -305,7 +313,7 @@ public class Player {
     }
 
 
-    private class BottomViewHolder{
+    private class BottomViewHolder {
         private CardView cardView;
         private TextView artist;
         private TextView title;
@@ -323,7 +331,7 @@ public class Player {
             play = activity.findViewById(R.id.bottom_play);
             art = activity.findViewById(R.id.bottom_art);
 
-            if(currentSong != null)
+            if (currentSong != null)
                 setSong(currentSong);
 
             cardView.setOnClickListener(new View.OnClickListener() {
@@ -342,7 +350,7 @@ public class Player {
             next.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(finished)
+                    if (finished)
                         next();
                 }
             });
@@ -350,7 +358,7 @@ public class Player {
             previous.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(finished)
+                    if (finished)
                         previous();
                 }
             });
@@ -358,7 +366,7 @@ public class Player {
             play.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(finished) {
+                    if (finished) {
                         if (isPlaying())
                             pause();
                         else
@@ -369,7 +377,7 @@ public class Player {
 
         }
 
-        void setSong(Song song){
+        void setSong(Song song) {
             art.setImageDrawable(Drawable.createFromPath(song.getAlbumArt()));
             artist.setText(song.getArtist());
             title.setText(song.getTitle());

@@ -28,7 +28,6 @@ public class PlayerViewHolder{
     private ImageButton next;
     private Button mode;
     private Button timer;
-    private Drawable defaultArt;
 
     public PlayerViewHolder(View context){
         art = context.findViewById(R.id.player_art);
@@ -41,7 +40,6 @@ public class PlayerViewHolder{
         next = context.findViewById(R.id.player_next);
         mode = context.findViewById(R.id.modeChanger);
         timer = context.findViewById(R.id.timer_button);
-        defaultArt = context.getContext().getDrawable(R.drawable.ic_music_note_black_70dp);
 
         timer.setText("N");
 

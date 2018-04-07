@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.tolek.player.AlbumActivity.AlbumActivity;
 import com.example.tolek.player.Entities.Artist;
 import com.example.tolek.player.Util.FileWorker;
+import com.example.tolek.player.debug.MediaStore;
 
 import java.util.ArrayList;
 
@@ -79,7 +80,8 @@ public final class ArtistRecyclerViewAdapter extends RecyclerView.Adapter<Artist
                 public void onClick(View view) {
                     view.getContext().startActivity(
                             new Intent(view.getContext(), AlbumActivity.class)
-                                    .putExtra("Artist", FileWorker.getArtists().indexOf(artist))
+                                    .putExtra("Artist",
+                                            MediaStore.getInstance().getArtists().indexOf(artist))
                     );
                 }
             });

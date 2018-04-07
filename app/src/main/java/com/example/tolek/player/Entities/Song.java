@@ -9,12 +9,65 @@ final public class Song {
     private String path;
     private String duration;
     private String albumArt;
-    public Long lastPosition = null;
 
+    public static class Builder {
+        private String id;
+        private String artist;
+        private String title;
+        private String album;
+        private String path;
+        private String duration;
+        private String cover;
 
-    @Deprecated
-    public Song(String id, String artist, String title,
-                String album, String path, String duration, String albumArt){
+        public Builder(String path, String duration){
+            this.path = path;
+            this.duration = duration;
+        }
+
+        public Builder setId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setArtist(String artist) {
+            this.artist = artist;
+            return this;
+        }
+
+        public Builder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder setAlbum(String album) {
+            this.album = album;
+            return this;
+        }
+
+        public Builder setPath(String path) {
+            this.path = path;
+            return this;
+        }
+
+        public Builder setDuration(String duration) {
+            this.duration = duration;
+            return this;
+        }
+
+        public Builder setCover(String cover){
+            this.cover = cover;
+            return this;
+        }
+
+        public Song build(){
+            Song song = new Song(id, artist, title, album, path, duration);
+            if(cover != null)
+                song.setCover(cover);
+            return song;
+        }
+    }
+
+    public Song(String id, String artist, String title, String album, String path, String duration){
         this.id = id;
         this.artist = artist == null || artist.equals("<unknown>") || artist.equals("")
                 ? "Unknown artist"
@@ -27,15 +80,10 @@ final public class Song {
                 : album;
         this.path = path;
         this.duration = duration;
-        this.albumArt = albumArt == null || albumArt.equals("") ? null : albumArt;
-    }
-
-    public Song(String id, String artist, String title, String album, String path, String duration){
-        this(id, artist, title, album, path, duration, null);
     }
 
     public void setCover(String albumArt){
-        this.albumArt = albumArt;
+        this.albumArt = albumArt == null || albumArt.equals("") ? null : albumArt;
     }
 
     public String getAlbumArt() {

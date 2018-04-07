@@ -44,7 +44,7 @@ public class PlayerPageFragment extends Fragment{
 
 /*
         LinearLayout layout = view.findViewById(R.id.player_layout);
-        String art = Player.getInstance().getCurrentSong().getAlbumArt();
+        String art = Player.getInstance().getCurrentSong().getCover();
         ImageView artImage = new ImageView(getContext());
         artImage.setScaleType(ImageView.ScaleType.CENTER);
         artImage.setAdjustViewBounds(true);
