@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.tolek.player.Entities.Song;
 import com.example.tolek.player.PlayerActivity.PlayerActivity;
+import com.example.tolek.player.PlayerActivity.TextPageFragment;
 import com.example.tolek.player.R;
 import com.example.tolek.player.debug.Logger;
 import com.example.tolek.player.debug.MediaStore;
@@ -90,6 +91,11 @@ public class Player {
         return currentPlaylist;
     }
 
+
+    public void setTextFragment(TextPageFragment fragment){
+        if(playerViewHolder != null)
+            playerViewHolder.setTextFragment(fragment);
+    }
 
     public void setPlayerViewHolder(View view) {
         if(view != null)
@@ -217,13 +223,6 @@ public class Player {
 
                             FileWorker.writePlaylist(lastSongs, "lastSongs");
                             play();
-
-                            if (mode == 2) {
-                                if (currentPosition < lastSongs.size() - 2
-                                        && !currentSong.equals(lastSongs.get(currentPosition + 1)))
-                                    for (int i = currentPosition; i < lastSongs.size(); i++)
-                                        lastSongs.remove(i);
-                            }
                         }
                     } catch (IOException exception) {
                         exception.printStackTrace();
@@ -245,6 +244,15 @@ public class Player {
         });
 
         mediaPlayer.pause();
+    }
+
+    public void checkMode(){
+        if (mode == 2) {
+            if (currentPosition < lastSongs.size() - 2
+                    && !currentSong.equals(lastSongs.get(currentPosition + 1)))
+                for (int i = currentPosition; i < lastSongs.size(); i++)
+                    lastSongs.remove(i);
+        }
     }
 
     public void next() {
@@ -274,6 +282,13 @@ public class Player {
                             );
                         }
                     }
+                    context.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(playerViewHolder != null)
+                                playerViewHolder.setText();
+                        }
+                    });
                     finished = true;
                 }
             }).start();

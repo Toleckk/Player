@@ -9,13 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.example.tolek.player.R;
 import com.example.tolek.player.SongRecyclerViewAdapter;
-import com.example.tolek.player.Util.FileWorker;
-import com.example.tolek.player.Util.Player;
-
+import com.example.tolek.player.debug.Player;
 
 public class PlaylistPageFragment extends Fragment {
     @Override

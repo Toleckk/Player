@@ -3,15 +3,18 @@ package com.example.tolek.player.PlayerActivity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.tolek.player.R;
 
-
 public class TextPageFragment extends Fragment {
+    View mainView;
+    String text;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,9 +23,23 @@ public class TextPageFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.text, container, false);
-        LinearLayout linearLayout = view.findViewById(R.id.text_layout);
+        mainView = inflater.inflate(R.layout.text, container, false);
+        if(text != null)
+            setText(text);
 
-        return view;
+        return mainView;
+    }
+
+    public void setText(String text) {
+        if(mainView != null) {
+            TextView textView = mainView.findViewById(R.id.text);
+            if (text != null) {
+                textView.setText(text);
+                textView.setMovementMethod(new ScrollingMovementMethod());
+            } else
+                textView.setText("No text for this song");
+        }
+        else
+            this.text = text;
     }
 }

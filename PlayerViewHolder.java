@@ -1,6 +1,5 @@
 package com.example.tolek.player.debug;
 
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -12,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.tolek.player.Entities.Song;
 import com.example.tolek.player.PlayerActivity.PlayerActivity;
+import com.example.tolek.player.PlayerActivity.TextPageFragment;
 import com.example.tolek.player.R;
 import com.example.tolek.player.Util.Player;
 import com.example.tolek.player.Util.SleepTimer;
@@ -26,6 +26,7 @@ public class PlayerViewHolder{
     private ImageButton previous;
     private ImageButton play;
     private ImageButton next;
+    private TextPageFragment textFragment;
     private Button mode;
     private Button timer;
 
@@ -177,5 +178,13 @@ public class PlayerViewHolder{
         title.setText(song.getTitle());
         album.setText(song.getAlbum());
         seekBar.setMax(Integer.valueOf(song.getDuration()));
+    }
+
+    public void setTextFragment(TextPageFragment textFragment) {
+        this.textFragment = textFragment;
+    }
+
+    public void setText(String text) {
+        textFragment.setText(text);
     }
 }

@@ -3,7 +3,6 @@ package com.example.tolek.player;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.tolek.player.Entities.Song;
-import com.example.tolek.player.Util.FileWorker;
-import com.example.tolek.player.Util.Player;
-import com.example.tolek.player.debug.Logger;
+import com.example.tolek.player.debug.Player;
 
 import java.util.ArrayList;
 
@@ -86,7 +83,7 @@ public final class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecy
                         player.pause();
                     else {
                         if(!player.getCurrentPlaylist().equals(playlist))
-                            player.setPlaylist(playlist);
+                            player.setCurrentPlaylist(playlist);
 
                         player.play(song);
                     }

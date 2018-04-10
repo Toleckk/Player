@@ -2,7 +2,6 @@ package com.example.tolek.player.Entities;
 
 import java.util.ArrayList;
 
-
 public class Album {
 
     private String albumName;

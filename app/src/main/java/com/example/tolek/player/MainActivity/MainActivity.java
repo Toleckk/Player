@@ -1,21 +1,14 @@
 package com.example.tolek.player.MainActivity;
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.transition.Scene;
-import android.transition.Transition;
-import android.util.Log;
-import android.view.View;
 
 import com.example.tolek.player.PageFragmentAdapter;
 import com.example.tolek.player.R;
-import com.example.tolek.player.Repository.SongsRepository;
 import com.example.tolek.player.Util.FileWorker;
-import com.example.tolek.player.Util.Player;
-import com.example.tolek.player.PlayerActivity.PlayerActivity;
+import com.example.tolek.player.debug.Player;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,14 +18,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Player.getInstance().setContext(this);
-        Player.getInstance().setBottomViewHolder(this);
+        Player.getInstance().setPlayerViewHolder(null);
+        Player.getInstance().setBottomViewHolder(new BottomViewHolder(this));
 
         TabLayout tabLayout = findViewById(R.id.tab);
         ViewPager viewPager = findViewById(R.id.view_pager);
-/*
-        DisabledSwipeViewPager viewPager = findViewById(R.id.view_pager);
-        viewPager.setEnableSwipe(false);*/
 
         viewPager.setAdapter(new PageFragmentAdapter(getSupportFragmentManager(), 4));
 
@@ -41,14 +31,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume(){
-        Player.getInstance().setContext(this);
-        Player.getInstance().setBottomViewHolder(this);
+        Player.getInstance().setPlayerViewHolder(null);
+        Player.getInstance().setBottomViewHolder(new BottomViewHolder(this));
         super.onResume();
     }
 
     @Override
     protected void onDestroy(){
-        Player.getInstance().setBottomViewHolder(this);
+        Player.getInstance().setBottomViewHolder(null);
         super.onDestroy();
     }
 }

@@ -60,7 +60,7 @@
                 android:textAlignment="center" />
 
             <ImageButton
-                android:id="@+id/bottom_to_right"
+                android:id="@+id/bottom_next"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
@@ -76,7 +76,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/bottom_to_right"
+                android:layout_toStartOf="@id/bottom_next"
                 android:background="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true"
@@ -84,7 +84,7 @@
                 android:src="@drawable/ic_play_arrow_black_40dp" />
 
             <ImageButton
-                android:id="@+id/bottom_to_left"
+                android:id="@+id/bottom_previous"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_centerVertical="true"

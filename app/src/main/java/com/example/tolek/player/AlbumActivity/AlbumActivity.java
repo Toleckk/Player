@@ -1,18 +1,16 @@
 package com.example.tolek.player.AlbumActivity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.MenuItem;
 
 import com.example.tolek.player.Entities.Song;
 import com.example.tolek.player.R;
 import com.example.tolek.player.SongRecyclerViewAdapter;
-import com.example.tolek.player.Util.FileWorker;
-import com.example.tolek.player.Util.Player;
+import com.example.tolek.player.MainActivity.BottomViewHolder;
 import com.example.tolek.player.debug.MediaStore;
+import com.example.tolek.player.debug.Player;
 
 import java.util.ArrayList;
 
@@ -23,8 +21,8 @@ public class AlbumActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album);
 
-        Player.getInstance().setContext(this);
-        Player.getInstance().setBottomViewHolder(this);
+        Player.getInstance().setPlayerViewHolder(null);
+        Player.getInstance().setBottomViewHolder(new BottomViewHolder(this));
 
         RecyclerView recyclerView = findViewById(R.id.songRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -46,8 +44,8 @@ public class AlbumActivity extends AppCompatActivity {
 
     @Override
     protected void onResume(){
-        Player.getInstance().setContext(this);
-        Player.getInstance().setBottomViewHolder(this);
+        Player.getInstance().setPlayerViewHolder(null);
+        Player.getInstance().setBottomViewHolder(new BottomViewHolder(this));
         super.onResume();
     }
 /*

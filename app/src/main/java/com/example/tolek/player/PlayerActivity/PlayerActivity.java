@@ -1,34 +1,19 @@
 package com.example.tolek.player.PlayerActivity;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.WindowManager;
 
 import com.example.tolek.player.R;
-import com.example.tolek.player.Util.Player;
+import com.example.tolek.player.debug.Player;
 
 public class PlayerActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter sectionsPagerAdapter;
-    private ViewPager viewPager;
-
-    @Override
-    protected void onPause(){
-        super.onPause();
-        overridePendingTransition(R.anim.animation_main_show, R.anim.animation_player_hide);
-    }
-
-    @Override
-    protected void onDestroy(){
-        Player.getInstance().setPlayerViewHolder(null);
-        super.onDestroy();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,33 +22,39 @@ public class PlayerActivity extends AppCompatActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        Player.getInstance().setContext(this);
 
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        viewPager = findViewById(R.id.playerViewPager);
+        ViewPager viewPager = findViewById(R.id.playerViewPager);
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setCurrentItem(1);
     }
 
     @Override
-    protected void onResume(){
-        Player.getInstance().setContext(this);
-        super.onResume();
+    protected void onPause() {
+        super.onPause();
+        Player.getInstance().setPlayerViewHolder(null);
+        overridePendingTransition(R.anim.animation_main_show, R.anim.animation_player_hide);
     }
 
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-        private PlayerPageFragment playerPageFragment = new PlayerPageFragment();
-        private TextPageFragment textPageFragment = new TextPageFragment();
-        private PlaylistPageFragment playlistPageFragment = new PlaylistPageFragment();
+        private PlayerPageFragment playerPageFragment;
+        private TextPageFragment textPageFragment;
+        private PlaylistPageFragment playlistPageFragment;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            playerPageFragment = new PlayerPageFragment();
+            textPageFragment = new TextPageFragment();
+            playlistPageFragment = new PlaylistPageFragment();
+
+            playerPageFragment.setTextPageFragment(textPageFragment);
         }
 
         @Override
         public Fragment getItem(int position) {
-            switch(position){
+            switch (position) {
                 case 0:
                     return textPageFragment;
                 case 1:
@@ -75,11 +66,11 @@ public class PlayerActivity extends AppCompatActivity {
             }
         }
 
+
         @Override
         public int getCount() {
             return 3;
         }
-
 
     }
 }

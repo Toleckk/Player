@@ -1,13 +1,19 @@
 package com.example.tolek.player.debug;
 
 
+import android.text.method.ScrollingMovementMethod;
+import android.widget.TextView;
+
 import com.example.tolek.player.Entities.Album;
 import com.example.tolek.player.Entities.Artist;
 import com.example.tolek.player.Entities.Song;
+import com.example.tolek.player.R;
 import com.example.tolek.player.Repository.AlbumsRepository;
 import com.example.tolek.player.Repository.ArtistsRepository;
 import com.example.tolek.player.Repository.SongsRepository;
 import com.example.tolek.player.Util.FileWorker;
+import com.example.tolek.player.jaudiotagger.audio.mp3.MP3File;
+import com.example.tolek.player.jaudiotagger.tag.FieldKey;
 
 
 import java.util.ArrayList;
@@ -110,6 +116,20 @@ public final class MediaStore {
         return albums;
     }
 
+
+    public String getText(Song song){
+        if(song != null) {
+            try {
+                MP3File file = new MP3File(song.getPath());
+                return file.hasID3v1Tag() || file.hasID3v2Tag()
+                        ? file.getTag().getFirst(FieldKey.LYRICS)
+                        : null;
+            } catch(Exception exception){
+                exception.printStackTrace();
+            }
+        }
+        return null;
+    }
 
     public ArrayList<Song> getSongs() {
         return songs.getList();

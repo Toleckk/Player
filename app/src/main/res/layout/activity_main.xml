@@ -54,7 +54,6 @@
                 android:layout_height="55dp"
                 android:layout_margin="0dp"
                 android:id="@+id/bottom_art"
-                android:background="@drawable/ic_music_note_black_70dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true"/>
 
@@ -80,7 +79,7 @@
                 android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:background="@android:color/transparent"
-                android:id="@+id/bottom_to_right"
+                android:id="@+id/bottom_next"
                 android:src="@drawable/ic_skip_next_black_40dp"/>
             <ImageButton
                 android:foreground="?android:attr/selectableItemBackground"
@@ -89,7 +88,7 @@
                 android:layout_centerVertical="true"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_toStartOf="@id/bottom_to_right"
+                android:layout_toStartOf="@id/bottom_next"
                 android:background="@android:color/transparent"
                 android:id="@+id/bottom_play"
                 android:src="@drawable/ic_play_arrow_black_40dp"/>
@@ -102,7 +101,7 @@
                 android:layout_height="30dp"
                 android:layout_toStartOf="@id/bottom_play"
                 android:background="@android:color/transparent"
-                android:id="@+id/bottom_to_left"
+                android:id="@+id/bottom_previous"
                 android:src="@drawable/ic_skip_previous_black_40dp"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
