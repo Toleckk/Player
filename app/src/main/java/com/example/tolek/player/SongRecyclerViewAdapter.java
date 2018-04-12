@@ -60,12 +60,12 @@ public final class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecy
 
     public static class SongViewHolder extends RecyclerView.ViewHolder{
 
-        CardView mainCardView;
-        ImageView albumArt;
-        TextView title;
-        TextView artistAndAlbum;
-        Song song;
-        ArrayList<Song> playlist;
+        public CardView mainCardView;
+        public ImageView albumArt;
+        public TextView title;
+        public TextView artistAndAlbum;
+        public Song song;
+        public ArrayList<Song> playlist;
 
         public SongViewHolder(final View itemView){
             super(itemView);

@@ -40,13 +40,13 @@ public class Player {
 
     private Player() {
         mediaPlayer = new MediaPlayer();
-        currentPlaylist = new ArrayList<>();
         random = new Random(System.currentTimeMillis());
         //TODO
         mode = 0;
 
         setCurrentPlaylist(FileWorker.getListFromJson("currentPlaylist"));
         setLastSongs(FileWorker.getListFromJson("lastSongs"));
+
 
         new Timer().schedule(new TimerTask() {
             @Override
@@ -182,7 +182,10 @@ public class Player {
         else
             this.currentPlaylist = MediaStore.getInstance().getSongs();
 
-        FileWorker.writePlaylist(currentPlaylist, "currentPlaylist");
+        if(this.currentPlaylist != null)
+            FileWorker.writePlaylist(currentPlaylist, "currentPlaylist");
+        else
+            this.currentPlaylist = new ArrayList<>();
     }
 
     public void setLastSongs(ArrayList<Song> lastSongs) {
@@ -191,6 +194,7 @@ public class Player {
             this.lastSongs = lastSongs;
             currentSong = lastSongs.get(lastSongs.size() - 1);
         } else if (currentPlaylist != null && currentPlaylist.size() > 0 && currentSong == null) {
+            this.lastSongs = new ArrayList<>();
             currentSong = currentPlaylist.get(0);
             currentPosition = 0;
         }
