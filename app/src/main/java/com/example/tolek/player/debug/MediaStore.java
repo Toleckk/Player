@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.example.tolek.player.Entities.Album;
 import com.example.tolek.player.Entities.Artist;
+import com.example.tolek.player.Entities.Entity;
 import com.example.tolek.player.Entities.Song;
 import com.example.tolek.player.R;
 import com.example.tolek.player.Repository.AlbumsRepository;
@@ -141,5 +142,13 @@ public final class MediaStore {
 
     public ArrayList<Artist> getArtists() {
         return artists.getList();
+    }
+
+    public ArrayList<Entity> getSongsAsEntities() {
+        ArrayList<Entity> list = new ArrayList<>();
+        for(Song song : songs.getList())
+            list.add(song);
+
+        return list;
     }
 }

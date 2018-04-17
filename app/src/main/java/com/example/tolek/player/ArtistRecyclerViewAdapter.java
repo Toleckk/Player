@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,15 +21,19 @@ import com.example.tolek.player.debug.MediaStore;
 
 import java.util.ArrayList;
 
-
-public final class ArtistRecyclerViewAdapter extends RecyclerView.Adapter<ArtistRecyclerViewAdapter.ArtistViewHolder> {
+@Deprecated
+public final class ArtistRecyclerViewAdapter extends RecyclerView.Adapter<ArtistRecyclerViewAdapter.ArtistViewHolder>
+        implements Filterable{
 
     ArrayList<Artist> artistsList;
+    boolean isQueryEmpty = true;
+    ArrayList<Artist> filtered;
     Drawable art;
 
     public ArtistRecyclerViewAdapter(ArrayList<Artist> artistsList, Drawable art){
         this.artistsList = artistsList;
         this.art = art;
+        filtered = new ArrayList<>();
     }
 
     @Override
@@ -44,6 +50,8 @@ public final class ArtistRecyclerViewAdapter extends RecyclerView.Adapter<Artist
 
     @Override
     public void onBindViewHolder(ArtistViewHolder holder, int position) {
+        ArrayList<Artist> artistsList = filtered.size() == 0 && isQueryEmpty? this.artistsList : filtered;
+
         holder.artistText.setText(artistsList.get(position).getName());
         holder.tracks.setText(String.valueOf(artistsList.get(position).getSongs().size()));
         holder.artist = artistsList.get(position);
@@ -56,7 +64,36 @@ public final class ArtistRecyclerViewAdapter extends RecyclerView.Adapter<Artist
 
     @Override
     public int getItemCount() {
-        return artistsList.size();
+        return filtered.size() == 0 && isQueryEmpty ? artistsList.size() : filtered.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                filterQuery(constraint.toString());
+
+                FilterResults results = new FilterResults();
+                results.values = filtered;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                filtered = (ArrayList<Artist>) results.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
+
+    private void filterQuery(String string){
+        isQueryEmpty = string == null || string.equals("");
+        filtered.clear();
+
+        for (Artist artist : artistsList)
+            if(artist.getName().toLowerCase().contains(string.toLowerCase()))
+                filtered.add(artist);
     }
 
     public static class ArtistViewHolder extends RecyclerView.ViewHolder{

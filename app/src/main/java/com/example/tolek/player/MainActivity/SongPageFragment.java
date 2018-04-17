@@ -10,12 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.tolek.player.Entities.Song;
+import com.example.tolek.player.Entities.ViewCreatingStrategy;
 import com.example.tolek.player.R;
-import com.example.tolek.player.SongRecyclerViewAdapter;
-import com.example.tolek.player.Util.FileWorker;
+import com.example.tolek.player.RecyclerViewAdapter;
 import com.example.tolek.player.debug.MediaStore;
 
 public class SongPageFragment extends Fragment {
+
+    private RecyclerViewAdapter recyclerViewAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,10 +34,23 @@ public class SongPageFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
-        recyclerView.setAdapter(new SongRecyclerViewAdapter(
-                MediaStore.getInstance().getSongs(),
-                getActivity().getDrawable(R.drawable.ic_music_note_black_70dp)
-        ));
+        recyclerViewAdapter = new RecyclerViewAdapter(
+                MediaStore.getInstance().getSongsAsEntities(),
+                getActivity().getDrawable(R.drawable.ic_music_note_black_70dp),
+                R.layout.song_card_view,
+                new ViewCreatingStrategy() {
+                    @Override
+                    public RecyclerView.ViewHolder createView(View view) {
+                        return new Song.ViewHolder(view);
+                    }
+                }
+        );
+//        recyclerViewAdapter = new SongRecyclerViewAdapter(
+//                MediaStore.getInstance().getSongs(),
+//                getActivity().getDrawable(R.drawable.ic_music_note_black_70dp)
+//        );
+
+        recyclerView.setAdapter(recyclerViewAdapter);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),
                 LinearLayoutManager.VERTICAL);
@@ -42,5 +58,9 @@ public class SongPageFragment extends Fragment {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         return view;
+    }
+
+    public RecyclerViewAdapter getRecyclerViewAdapter() {
+        return recyclerViewAdapter;
     }
 }

@@ -4,6 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.example.tolek.player.PlayerActivity.PlayerPageFragment;
+import com.example.tolek.player.PlayerActivity.TextPageFragment;
+
 
 public class PageFragmentAdapter extends FragmentStatePagerAdapter {
     PlayerPageFragment playerPageFragment;

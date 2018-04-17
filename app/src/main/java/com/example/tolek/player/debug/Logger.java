@@ -11,4 +11,8 @@ public class Logger {
     public static void log(boolean message){
         log(String.valueOf(message));
     }
+
+    public static void log(int message) {
+        log(String.valueOf(message));
+    }
 }

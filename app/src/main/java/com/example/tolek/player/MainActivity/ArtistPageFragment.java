@@ -11,11 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tolek.player.ArtistRecyclerViewAdapter;
+import com.example.tolek.player.Entities.Artist;
+import com.example.tolek.player.Entities.ViewCreatingStrategy;
 import com.example.tolek.player.R;
+import com.example.tolek.player.RecyclerViewAdapter;
 import com.example.tolek.player.Util.FileWorker;
 import com.example.tolek.player.debug.MediaStore;
 
 public class ArtistPageFragment extends Fragment{
+    private RecyclerViewAdapter recyclerViewAdapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +35,16 @@ public class ArtistPageFragment extends Fragment{
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
-        recyclerView.setAdapter(new ArtistRecyclerViewAdapter(MediaStore.getInstance().getArtists(),
-                getActivity().getDrawable(R.drawable.ic_music_note_black_70dp)));
+        recyclerViewAdapter = new RecyclerViewAdapter(MediaStore.getInstance().getArtists(),
+                getActivity().getDrawable(R.drawable.ic_music_note_black_70dp),
+                R.layout.artist_card_view, new ViewCreatingStrategy() {
+            @Override
+            public RecyclerView.ViewHolder createView(View view) {
+                return new Artist.ViewHolder(view);
+            }
+        });
+
+        recyclerView.setAdapter(recyclerViewAdapter);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),
                 LinearLayoutManager.VERTICAL);
@@ -39,5 +52,9 @@ public class ArtistPageFragment extends Fragment{
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         return view;
+    }
+
+    public RecyclerViewAdapter getRecyclerViewAdapter() {
+        return recyclerViewAdapter;
     }
 }

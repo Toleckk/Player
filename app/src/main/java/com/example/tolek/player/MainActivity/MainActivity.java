@@ -2,29 +2,22 @@ package com.example.tolek.player.MainActivity;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
 
-import com.example.tolek.player.PageFragmentAdapter;
 import com.example.tolek.player.R;
 import com.example.tolek.player.Util.FileWorker;
 import com.example.tolek.player.debug.Player;
-import com.example.tolek.player.search.SearchRecyclerViewAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
     LinearLayout mainLayout;
     ViewPager tabPager;
-    RecyclerView searchRecyclerView;
-    SearchRecyclerViewAdapter searchRecyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,42 +35,15 @@ public class MainActivity extends AppCompatActivity {
         tabPager.setAdapter(new PageFragmentAdapter(getSupportFragmentManager(), 4));
 
         tab.setupWithViewPager(tabPager);
-
-        searchRecyclerView = findViewById(R.id.search_layout);
-        searchRecyclerView.setHasFixedSize(true);
-        searchRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        searchRecyclerView.setVisibility(View.GONE);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(
+                menu.findItem(R.id.action_search));
 
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                mainLayout.setVisibility(View.GONE);
-                tabPager.setVisibility(View.GONE);
-                searchRecyclerView.setVisibility(View.VISIBLE);
-                switch (tabPager.getCurrentItem()) {
-                    default:
-                        searchRecyclerViewAdapter = new SearchRecyclerViewAdapter(getDrawable(R.drawable.ic_music_note_black_70dp));
-                        searchRecyclerView.setAdapter(searchRecyclerViewAdapter);
-                }
-                return false;
-            }
-        });
-        searchView.setOnSearchClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mainLayout.setVisibility(View.VISIBLE);
-                tabPager.setVisibility(View.VISIBLE);
-                searchRecyclerView.setVisibility(View.GONE);
-            }
-        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -86,13 +52,37 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (searchRecyclerViewAdapter != null)
-                    searchRecyclerViewAdapter.getFilter().filter(newText);
+                Fragment fragment = ((PageFragmentAdapter)tabPager.getAdapter())
+                        .getItem(tabPager.getCurrentItem());
+                switch(tabPager.getCurrentItem()){
+                    case 0:
+                        ((SongPageFragment)fragment).getRecyclerViewAdapter().getFilter().filter(newText);
+                        break;
+                    case 1:
+                        ((AlbumPageFragment)fragment).getRecyclerViewAdapter().getFilter().filter(newText);
+                        break;
+                    case 2:
+                        ((ArtistPageFragment)fragment).getRecyclerViewAdapter().getFilter().filter(newText);
+                }
                 return true;
             }
         });
+        tabPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            private int position;
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if(this.position != position){
+                    this.position = position;
+                    searchView.onActionViewCollapsed();
+                }
+            }
 
+            @Override
+            public void onPageSelected(int position) {}
 
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
         return true;
     }
 
