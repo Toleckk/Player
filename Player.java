@@ -12,9 +12,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.tolek.player.Entities.Song;
-import com.example.tolek.player.PlayerActivity.PlayerActivity;
-import com.example.tolek.player.PlayerActivity.TextPageFragment;
+import com.example.tolek.player.domain.Entities.Song;
+import com.example.tolek.player.gui.PlayerActivity.PlayerActivity;
+import com.example.tolek.player.gui.PlayerActivity.TextPageFragment;
 import com.example.tolek.player.R;
 import com.example.tolek.player.debug.Logger;
 import com.example.tolek.player.debug.MediaStore;

@@ -1,109 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/mainActivity"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="com.example.tolek.player.MainActivity.MainActivity">
+    tools:context=".gui.MainActivity.MainActivity">
 
     <LinearLayout android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_marginBottom="60dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_card_view">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_card_view"
+        app:layout_constraintTop_toTopOf="parent">
 
-
-        <android.support.design.widget.TabLayout
+        <android.support.design.widget.TabLayout android:id="@+id/tab"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/tab"/>
+            android:layout_height="wrap_content" />
 
-        <com.example.tolek.player.Widgets.DisabledSwipeViewPager
-            android:id="@+id/view_pager"
+        <com.example.tolek.player.gui.Widgets.DisabledSwipeViewPager android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="0px"
             android:layout_weight="1"
-            android:background="@android:color/white"
-            />
+            android:background="@android:color/white" />
     </LinearLayout>
 
+    <android.support.v7.widget.CardView android:id="@+id/context_menu"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageButton android:id="@+id/context_play"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_play_arrow_black_70dp" />
+
+            <ImageButton android:id="@+id/context_add"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_playlist_add_black_70dp" />
+
+            <ImageButton android:id="@+id/context_insert"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_playlist_add_check_black_70dp" />
+
+            <ImageButton android:id="@+id/context_send"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_share_black_70dp" />
+
+            <ImageButton android:id="@+id/context_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_delete_black_70dp" />
+
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
+        android:id="@+id/bottom_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:transitionName="@string/transition_name_bottom"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:id="@+id/bottom_card_view">
+        android:transitionName="@string/transition_name_bottom"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <RelativeLayout
-            android:layout_marginTop="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="2dp"
             android:layout_marginEnd="5dp"
             android:layout_marginStart="2dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_marginTop="2dp">
 
             <ImageView
+                android:id="@+id/bottom_art"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
-                android:layout_margin="0dp"
-                android:id="@+id/bottom_art"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"/>
+                android:layout_margin="0dp" />
 
             <TextView
+                android:id="@+id/bottom_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@+id/bottom_art"
-                android:textAlignment="center"
-                android:id="@+id/bottom_title"/>
+                android:textAlignment="center" />
+
             <TextView
+                android:id="@+id/bottom_artist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/bottom_art"
                 android:layout_below="@id/bottom_title"
-                android:textAlignment="center"
-                android:id="@+id/bottom_artist"/>
+                android:layout_toEndOf="@id/bottom_art"
+                android:textAlignment="center" />
+
             <ImageButton
-                android:foreground="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_centerVertical="true"
+                android:id="@+id/bottom_next"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
                 android:background="@android:color/transparent"
-                android:id="@+id/bottom_next"
-                android:src="@drawable/ic_skip_next_black_40dp"/>
-            <ImageButton
-                android:foreground="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_centerVertical="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:src="@drawable/ic_skip_next_black_40dp" />
+
+            <ImageButton
+                android:id="@+id/bottom_play"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/bottom_next"
                 android:background="@android:color/transparent"
-                android:id="@+id/bottom_play"
-                android:src="@drawable/ic_play_arrow_black_40dp"/>
-            <ImageButton
-                android:foreground="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_centerVertical="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:src="@drawable/ic_play_arrow_black_40dp" />
+
+            <ImageButton
+                android:id="@+id/bottom_previous"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/bottom_play"
                 android:background="@android:color/transparent"
-                android:id="@+id/bottom_previous"
-                android:src="@drawable/ic_skip_previous_black_40dp"/>
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:src="@drawable/ic_skip_previous_black_40dp" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 

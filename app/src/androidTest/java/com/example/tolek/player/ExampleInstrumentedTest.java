@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.tolek.player", appContext.getPackageName());
+        assertEquals("com.example.tolek.player_activity_tab_player", appContext.getPackageName());
     }
 }

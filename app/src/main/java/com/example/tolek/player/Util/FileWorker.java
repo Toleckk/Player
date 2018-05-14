@@ -2,35 +2,31 @@ package com.example.tolek.player.Util;
 
 import android.os.Environment;
 
-import com.example.tolek.player.Entities.Album;
-import com.example.tolek.player.Entities.Artist;
-import com.example.tolek.player.Entities.Song;
+import com.example.tolek.player.domain.Entities.Entity;
+import com.example.tolek.player.domain.Entities.Playlist;
+import com.example.tolek.player.domain.Entities.Song;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public final class FileWorker {
     static private final String APP_DIRECTORY = Environment.getExternalStorageDirectory()
             + "/Player/";
 
-
     static public boolean isFileExist(String name) {
-        return new File(APP_DIRECTORY + name + ".txt").exists();
+        return new File(APP_DIRECTORY + name).exists();
     }
 
     static public void writePlaylist(ArrayList<Song> playlist, String name) {
-        try (FileWriter fileWriter = new FileWriter(APP_DIRECTORY + "/" + name + ".txt")) {
+        try (FileWriter fileWriter = new FileWriter(APP_DIRECTORY + "/" + name)) {
             if (playlist != null && playlist.size() != 0)
                 fileWriter.write(new GsonBuilder().create().toJson(playlist));
         } catch (IOException exception) {
@@ -49,14 +45,14 @@ public final class FileWorker {
         return stringFile;
     }
 
-    static private void makeCoverDirectory(){
+    static private void makeCoverDirectory() {
         try {
             File file = new File(APP_DIRECTORY + "/Cover/");
             if (!file.exists()) {
                 file.mkdirs();
                 new File(file.getAbsolutePath() + "/.nomedia").createNewFile();
             }
-        }catch(IOException exception){
+        } catch (IOException exception) {
             exception.printStackTrace();
         }
     }
@@ -85,14 +81,37 @@ public final class FileWorker {
     public static ArrayList<Song> getListFromJson(String fileName) {
         ArrayList<Song> songsList = new ArrayList<>();
         try {
-            String stringFile = readFile(new File(APP_DIRECTORY + fileName + ".txt"));
+            String stringFile = readFile(new File(APP_DIRECTORY + fileName));
             if (!stringFile.equals(""))
                 songsList = new Gson().fromJson(stringFile,
-                        new TypeToken<ArrayList<Song>>(){}.getType());
-        } catch (IOException exception){
+                        new TypeToken<ArrayList<Song>>() {
+                        }.getType());
+        } catch (IOException exception) {
             exception.printStackTrace();
         }
         return songsList;
+    }
+
+    public static ArrayList<Playlist> getCustomPlaylists() {
+        ArrayList<Playlist> playlists = new ArrayList<>();
+
+        File directory = new File(APP_DIRECTORY + "Playlists/");
+
+        if (directory.exists()) {
+            for (File file : directory.listFiles())
+                playlists.add(new Playlist(file.getName(),
+                        getListFromJson("Playlists/" + file.getName())));
+        } else
+            directory.mkdirs();
+
+        return playlists;
+    }
+
+    public static void delete(Entity entity) {
+        if (entity instanceof Playlist)
+            new File(APP_DIRECTORY + "Playlists/" + ((Playlist) entity).getName()).delete();
+        else if (entity instanceof Song)
+            new File(((Song) entity).getPath()).delete();
     }
 }
 

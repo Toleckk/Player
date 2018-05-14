@@ -1,7 +1,7 @@
 package com.example.tolek.player.Util;
 
 
-import com.example.tolek.player.debug.Player;
+import com.example.tolek.player.domain.Player;
 
 import java.util.Timer;
 

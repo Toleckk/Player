@@ -9,9 +9,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.tolek.player.Entities.Song;
-import com.example.tolek.player.PlayerActivity.PlayerActivity;
-import com.example.tolek.player.PlayerActivity.TextPageFragment;
+import com.example.tolek.player.domain.Entities.Song;
+import com.example.tolek.player.gui.PlayerActivity.PlayerActivity;
+import com.example.tolek.player.gui.PlayerActivity.TextPageFragment;
 import com.example.tolek.player.R;
 import com.example.tolek.player.Util.Player;
 import com.example.tolek.player.Util.SleepTimer;

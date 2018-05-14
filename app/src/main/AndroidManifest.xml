@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity.MainActivity">
+        <activity android:name=".gui.MainActivity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,12 +20,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PlayerActivity.PlayerActivity"
+            android:name=".gui.PlayerActivity.PlayerActivity"
             android:label="@string/title_activity_player_activity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AlbumActivity.AlbumActivity"
+            android:name=".gui.PlaylistActivity.PlaylistActivity"
             android:label="@string/title_activity_album_activity" />
+        <activity android:name=".gui.PlaylistCreatingActivity.PlaylistCreatingActivity"></activity>
     </application>
 
 </manifest>
